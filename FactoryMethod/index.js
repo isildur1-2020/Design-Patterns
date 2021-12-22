@@ -7,48 +7,69 @@ var Boo = /** @class */ (function () {
     Boo.prototype.updateLogic = function () { };
     return Boo;
 }());
-var Kooba = /** @class */ (function () {
-    function Kooba() {
+var Koopa = /** @class */ (function () {
+    function Koopa() {
     }
-    Kooba.prototype.speak = function () {
+    Koopa.prototype.speak = function () {
         console.log('Hola, soy Kooba!');
     };
-    Kooba.prototype.updateLogic = function () { };
-    return Kooba;
+    Koopa.prototype.updateLogic = function () { };
+    return Koopa;
 }());
-var BooFactory = /** @class */ (function () {
-    function BooFactory() {
+var Goomba = /** @class */ (function () {
+    function Goomba() {
     }
-    BooFactory.prototype.createEnemy = function () {
-        return new Boo();
+    Goomba.prototype.speak = function () {
+        console.log('Hola, soy Goomba');
     };
-    return BooFactory;
+    Goomba.prototype.updateLogic = function () { };
+    return Goomba;
 }());
-var KoobaFactory = /** @class */ (function () {
-    function KoobaFactory() {
+var RandomEnemyFactory = /** @class */ (function () {
+    function RandomEnemyFactory() {
     }
-    KoobaFactory.prototype.createEnemy = function () {
-        return new Kooba();
+    RandomEnemyFactory.prototype.createEnemy = function () {
+        var randomNum = Math.random();
+        var enemy;
+        if (randomNum > 0.66)
+            enemy = new Koopa();
+        else if (randomNum > 0.33)
+            enemy = new Goomba();
+        else
+            enemy = new Boo();
+        return enemy;
     };
-    return KoobaFactory;
+    return RandomEnemyFactory;
 }());
-// ===================
+var RandomDifficultEnemyFactory = /** @class */ (function () {
+    function RandomDifficultEnemyFactory() {
+    }
+    RandomDifficultEnemyFactory.prototype.createEnemy = function () {
+        var randomNum = Math.random();
+        var enemy;
+        if (randomNum > 0.50)
+            enemy = new Koopa();
+        else if (randomNum > 0.33)
+            enemy = new Goomba();
+        else
+            enemy = new Boo();
+        return enemy;
+    };
+    return RandomDifficultEnemyFactory;
+}());
+// ====================================================================
 var Game = /** @class */ (function () {
-    function Game(booFactory, koobaFactory) {
-        this.booFactory = booFactory;
-        this.koobaFactory = koobaFactory;
+    function Game(enemyFactory) {
+        this.enemyFactory = enemyFactory;
     }
     Game.prototype.gameLogic = function () {
         console.log('Inicio del juego');
-        console.log('Creando enemigos...');
-        var booEnemy = this.booFactory.createEnemy();
-        console.log('Boo creado...');
-        var koobaEnemy = this.koobaFactory.createEnemy();
-        console.log('Kooba creado...');
+        console.log('Creando enemigo...');
+        var enemy = this.enemyFactory.createEnemy();
+        console.log('Enemigo creado...');
         console.log('---------------------------------');
-        console.log(booEnemy.speak());
-        console.log(koobaEnemy.speak());
+        console.log(enemy.speak());
     };
     return Game;
 }());
-new Game(new BooFactory, new KoobaFactory).gameLogic();
+new Game(new RandomEnemyFactory).gameLogic();

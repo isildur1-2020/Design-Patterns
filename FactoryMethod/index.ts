@@ -10,53 +10,71 @@ class Boo implements Entity {
     updateLogic() { }
 }
 
-class Kooba implements Entity {
+class Koopa implements Entity {
     speak() {
         console.log('Hola, soy Kooba!')
     }
     updateLogic() { }
 }
 
-// ===================
+class Goomba implements Entity {
+    speak() {
+        console.log('Hola, soy Goomba')
+    }
+    updateLogic() { }
+}
+
+// ====================================================================
 
 interface EnemyFactory {
     createEnemy(): Entity
 }
 
-class BooFactory implements EnemyFactory {
+class RandomEnemyFactory implements EnemyFactory {
     createEnemy() {
-        return new Boo()
+        let randomNum = Math.random()
+        let enemy: Entity
+        if (randomNum > 0.66)
+            enemy = new Koopa()
+        else if (randomNum > 0.33)
+            enemy = new Goomba()
+        else
+            enemy = new Boo()
+        return enemy
     }
 }
 
-class KoobaFactory implements EnemyFactory {
+class RandomDifficultEnemyFactory implements EnemyFactory {
     createEnemy() {
-        return new Kooba()
+        let randomNum = Math.random()
+        let enemy: Entity
+        if (randomNum > 0.50)
+            enemy = new Koopa()
+        else if (randomNum > 0.33)
+            enemy = new Goomba()
+        else
+            enemy = new Boo()
+        return enemy
     }
 }
 
-// ===================
+// ====================================================================
 
 class Game {
-    private booFactory: EnemyFactory
-    private koobaFactory: EnemyFactory
+    private enemyFactory: EnemyFactory
 
-    constructor(booFactory: EnemyFactory, koobaFactory: EnemyFactory) {
-        this.booFactory = booFactory
-        this.koobaFactory = koobaFactory
+    constructor(enemyFactory: EnemyFactory) {
+        this.enemyFactory = enemyFactory
     }
 
     gameLogic() {
         console.log('Inicio del juego')
-        console.log('Creando enemigos...')
-        let booEnemy = this.booFactory.createEnemy()
-        console.log('Boo creado...')
-        let koobaEnemy = this.koobaFactory.createEnemy()
-        console.log('Kooba creado...')
+        console.log('Creando enemigo...')
+        let enemy = this.enemyFactory.createEnemy()
+        console.log('Enemigo creado...')
         console.log('---------------------------------')
-        console.log(booEnemy.speak())
-        console.log(koobaEnemy.speak())
+        console.log(enemy.speak())
     }
 }
 
-new Game(new BooFactory, new KoobaFactory).gameLogic()
+new Game(new RandomEnemyFactory).gameLogic()
